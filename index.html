@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudentNest - Find Student Housing in Bamenda & Bambili</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+    <!-- ============ SECTION 1: NAVIGATION ALGORITHM ============ -->
+    <nav id="navBar" class="navbar">
+        <div class="navbar-container">
+            <div class="logo-section">
+                <span class="logo-icon">🏠</span>
+                <span class="logo-text">StudentNest</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#" class="nav-item">Listings</a>
+                <a href="#" class="nav-item">Wishlist</a>
+                <a href="#" class="nav-item">For Landlords</a>
+                <div class="location-display">
+                    <span class="location-icon">📍</span>
+                    <span class="location-text">Bamenda & Bambili</span>
+                </div>
+                <button class="signin-btn">Sign in</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ============ MAIN LAYOUT ============ -->
+    <div class="layout-wrapper">
+        <!-- LEFT PANEL: LISTINGS SECTION -->
+        <div class="left-panel">
+            
+           
+            
+
+            <!-- SECTION 4: FILTER TABS ALGORITHM -->
+            <div id="filterSection" class="filter-tabs">
+                <button class="filter-tab active" data-filter="all" data-algorithm="filterByAll">
+                    <span>All Listings</span>
+                </button>
+                <button class="filter-tab" data-filter="price" data-algorithm="filterByPrice">
+                    <span class="tab-icon">💰</span>
+                    <span>Price</span>
+                </button>
+                <button class="filter-tab" data-filter="people" data-algorithm="filterByCapacity">
+                    <span class="tab-icon">👥</span>
+                    <span>People</span>
+                </button>
+                <button class="filter-tab" data-filter="amenities" data-algorithm="filterByAmenities">
+                    <span class="tab-icon">⭐</span>
+                    <span>Amenities</span>
+                </button>
+                <button class="filter-tab" data-filter="university" data-algorithm="filterByUniversity">
+                    <span class="tab-icon">🎓</span>
+                    <span>By University</span>
+                </button>
+            </div>
+
+            <!-- SECTION 3: HEADER & TITLE ALGORITHM -->
+            <div id="headerSection" class="listings-header">
+                <h1 class="listings-title">Furnished student apartments in Bamenda & Bambili</h1>
+                <p class="results-count" id="resultsCounter">Loading listings...</p>
+            </div>
+
+            <!-- SECTION 5: SEARCH ALGORITHM -->
+            <div id="searchSection" class="search-section">
+                <input type="text" 
+                       id="searchBox" 
+                       class="search-input" 
+                       placeholder="Search by neighborhood, university, or property type..." 
+                       data-algorithm="liveSearchAlgorithm">
+                <button class="search-btn" id="searchBtn">🔍</button>
+            </div>
+
+            <!-- SECTION 6: LISTINGS CONTAINER ALGORITHM -->
+            <div id="listingsContainer" class="listings-container" data-algorithm="renderListingsAlgorithm">
+                <!-- Listing cards will be generated here -->
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL: MAP SECTION -->
+        <div class="right-panel">
+            <!-- SECTION 7: MAP ALGORITHM -->
+            <div id="mapContainer" class="map-container" data-algorithm="initializeMapAlgorithm">
+                <div id="map" class="map"></div>
+            </div>
+            
+            <!-- SECTION 8: MAP FOOTER ALGORITHM -->
+            <div id="mapFooter" class="map-footer" data-algorithm="updateMapFooterAlgorithm">
+                <p id="mapStatement">Showing <span id="mapCount">0</span> out of <span id="totalCount">0</span> listings</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ SECTION 9: MODAL ALGORITHM ============ -->
+    <div id="listingModal" class="modal" data-algorithm="modalAlgorithm">
+        <div class="modal-wrapper">
+            <div class="modal-header">
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Modal content will be generated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="algorithms.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
