@@ -121,12 +121,6 @@ let map = null;
 let markers = [];
 
 // Initialize the app
-document.addEventListener('DOMContentLoaded', function() {
-    initMap();
-    renderListings(listings);
-    setupEventListeners();
-    loadFavorites();
-});
 
 // Initialize map
 function initMap() {
@@ -178,74 +172,18 @@ function updateMapMarkers(listingsToShow) {
 }
 
 // Render listings
-function renderListings(listingsToRender) {
-    const grid = document.getElementById('listingsGrid');
-    grid.innerHTML = '';
+{currentListings.map((listing) => (
+  <div key={listing.id} className="listing-card">
+    <div className="listing-image">{listing.images[0]}</div>
 
-    if (listingsToRender.length === 0) {
-        grid.innerHTML = '<p style="padding: 2rem; text-align: center; color: #636e72;">No listings found. Try adjusting your filters.</p>';
-        return;
-    }
+    <h3>{listing.title}</h3>
+    <p>€{listing.price}/month</p>
 
-    listingsToRender.forEach(listing => {
-        const isFavorited = favorites.includes(listing.id);
-        const card = document.createElement('div');
-        card.className = 'listing-card';
-        card.innerHTML = `
-            <div class="listing-image">
-                <div class="listing-image-placeholder">${listing.images[0]}</div>
-                <button class="favorite-btn ${isFavorited ? 'favorited' : ''}" data-id="${listing.id}">
-                    ${isFavorited ? '❤️' : '🤍'}
-                </button>
-            </div>
-            <div class="listing-body">
-                <h3 class="listing-title">${listing.title}</h3>
-                <div class="listing-price">
-                    €${listing.price}
-                    <span class="listing-price-period">/month</span>
-                </div>
-                <div class="listing-specs">
-                    <div class="spec-item">
-                        <span class="spec-icon">🛏️</span>
-                        <span>${listing.rooms} room${listing.rooms > 1 ? 's' : ''}</span>
-                    </div>
-                    <div class="spec-item">
-                        <span class="spec-icon">👥</span>
-                        <span>${listing.people} person</span>
-                    </div>
-                    <div class="spec-item">
-                        <span class="spec-icon">📐</span>
-                        <span>${listing.size}</span>
-                    </div>
-                </div>
-                <div class="listing-location">
-                    📍 ${listing.location}
-                </div>
-                <div class="listing-amenities">
-                    ${listing.amenities.slice(0, 3).map(amenity => `<span class="amenity-tag">${amenity}</span>`).join('')}
-                </div>
-            </div>
-        `;
-        
-        card.addEventListener('click', (e) => {
-            if (!e.target.classList.contains('favorite-btn')) {
-                showListingModal(listing);
-            }
-        });
-
-        const favoriteBtn = card.querySelector('.favorite-btn');
-        favoriteBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            toggleFavorite(listing.id, favoriteBtn);
-        });
-
-        grid.appendChild(card);
-    });
-
-    // Update results count
-    document.getElementById('resultsCount').textContent = `${listingsToRender.length} listings found`;
-}
-
+    <button onClick={() => toggleFavorite(listing.id)}>
+      {favorites.includes(listing.id) ? "❤️" : "🤍"}
+    </button>
+  </div>
+))}
 // Show listing modal
 function showListingModal(listing) {
     const modal = document.getElementById('listingModal');
@@ -315,23 +253,12 @@ function showListingModal(listing) {
 }
 
 // Toggle favorite
-function toggleFavorite(listingId, button) {
-    const index = favorites.indexOf(listingId);
-    if (index > -1) {
-        favorites.splice(index, 1);
-    } else {
-        favorites.push(listingId);
-    }
-    
-    // Update button appearance
-    button.classList.toggle('favorited');
-    button.textContent = button.classList.contains('favorited') ? '❤️' : '🤍';
-    
-    // Save to localStorage
-    saveFavorites();
-    
-    // Update all favorite buttons across the page
-    updateFavoriteButtons();
+function toggleFavorite(id: number) {
+  setFavorites((prev) =>
+    prev.includes(id)
+      ? prev.filter((f) => f !== id)
+      : [...prev, id]
+  );
 }
 
 // Update all favorite buttons
@@ -390,35 +317,22 @@ function setupEventListeners() {
 }
 
 // Apply filters
-function applyFilter(filter) {
-    currentFilter = filter;
-    let filtered = [...listings];
+function applyFilter(type: string) {
+  let filtered = [...listings];
 
-    switch(filter) {
-        case 'price':
-            // Sort by price low to high
-            filtered.sort((a, b) => a.price - b.price);
-            break;
-        case 'people':
-            // Filter for 1-2 people apartments
-            filtered = filtered.filter(l => l.people <= 2);
-            break;
-        case 'amenities':
-            // Filter for apartments with 4+ amenities
-            filtered = filtered.filter(l => l.amenities.length >= 4);
-            break;
-        case 'more':
-            // For now, show all (in real app would open advanced filters)
-            break;
-        case 'all':
-        default:
-            // Show all listings
-            break;
-    }
+  if (type === "price") {
+    filtered.sort((a, b) => a.price - b.price);
+  }
 
-    currentListings = filtered;
-    renderListings(filtered);
-    updateMapMarkers(filtered);
+  if (type === "people") {
+    filtered = filtered.filter((l) => l.people <= 2);
+  }
+
+  if (type === "amenities") {
+    filtered = filtered.filter((l) => l.amenities.length >= 4);
+  }
+
+  setCurrentListings(filtered);
 }
 
 // Responsive adjustments
