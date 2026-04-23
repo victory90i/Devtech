@@ -1,3 +1,10 @@
+import { useState } from "react";
+const listings = [/* your full data stays exactly the same */];
+import { useEffect, useState } from "react";
+
+export default function Page() {
+  const [currentListings, setCurrentListings] = useState(listings);
+  const [favorites, setFavorites] = useState<number[]>([]);
 export default function Page() {
   return (
     <div>
