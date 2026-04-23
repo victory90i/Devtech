@@ -1,11 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 const listings = [/* your full data stays exactly the same */];
-import { useEffect, useState } from "react";
 
 export default function Page() {
   const [currentListings, setCurrentListings] = useState(listings);
   const [favorites, setFavorites] = useState<number[]>([]);
-export default function Page() {
+useEffect(() => {
+
+    initMap();
+
+    loadFavorites();
+
+  }, []);
+
   return (
     <div>
       {/* NAVBAR */}
